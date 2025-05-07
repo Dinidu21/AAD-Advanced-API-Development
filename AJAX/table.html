@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajax</title>
+</head>
+<body>
+
+<h1>Ajax Example</h1>
+<button id="ajax-btn">Send an Ajax Request</button>
+
+<table id="student-table">
+  <thead>
+  <tr>
+    <th>First Name</th>
+    <th>Second Name</th>
+    <th>Address</th>
+    <th>Mobile</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+
+  $('#ajax-btn').click(function () {
+    $.ajax({
+      url: 'db.json',
+      method: 'GET',
+      success: function (response) {
+        console.log(response);
+
+        const tbody = $('#student-table tbody');
+        tbody.empty();
+
+        response.forEach(student => {
+          const row = `
+                        <tr>
+                            <td>${student.firstName}</td>
+                            <td>${student.secondName}</td>
+                            <td>${student.address}</td>
+                            <td>${student.mobile}</td>
+                        </tr>
+                    `;
+          tbody.append(row);
+        });
+      },
+      error: function (error) {
+        console.error('Error:', error);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
