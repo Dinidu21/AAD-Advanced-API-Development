@@ -10,7 +10,11 @@
 <button id="ajax-btn">Send an Ajax Request</button>
 <div id="response">
     <h2>Response</h2>
-    <p id="response-text"></p>
+    <p id="response-text">Response will be displayed here</p>
+    <p id="firstName">John</p>
+    <p id="secondName">Doe</p>
+    <p id="address">New York</p>
+    <p id="mobile">30</p>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -40,22 +44,21 @@
         // };
 
 
-
         $.ajax({
-            url: 'db.txt',
+            url: 'db.json',
             method: 'GET',
             success : function (response) {
                 console.log(response)
-                $('#response-text').text(response);
+                $('#firstName').text(response.firstName);
+                $('#secondName').text(response.secondName);
+                $('#address').text(response.address);
+                $('#mobile').text(response.mobile);
             },
             error: function (error) {
                 console.error('Error:', error);
             }
-
         });
-
     });
-
 </script>
 
 </body>
