@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+</head>
+<body>
+
+<h1>Ajax Example</h1>
+<button id="ajax-btn">Send an Ajax Request</button>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $('#ajax-btn').click(function () {
+        console.log("Before Create the XMLHttpRequest object");
+        var xhr = new XMLHttpRequest();
+        console.log(xhr.readyState,"After Create the XMLHttpRequest object");
+        xhr.open('GET', 'https://youtu.be/VQRLujxTm3c?si=e4MvnW9CbG7HuwMG');
+        console.log(xhr.readyState,"After open the XMLHttpRequest object");
+        xhr.send();
+        console.log(xhr.readyState,"After send the XMLHttpRequest object");
+        console.log("Request Finished");
+        xhr.onreadystatechange = function () {
+            console.log(xhr.readyState, "In the onreadystatechange function");
+        };
+    });
+    
+</script>
+
+</body>
+</html>
