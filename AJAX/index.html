@@ -28,16 +28,31 @@
         //     console.log(xhr.readyState, "In the onreadystatechange function");
         // };
 
-        var http = new XMLHttpRequest();
-        http.open('GET', 'db.txt');
-        http.send();
-        http.onreadystatechange = function () {
-            if (http.status === 200 && http.readyState === 4) {
-                $('#response-text').text(http.responseText);
-            }else if (http.status === 404 && http.readyState === 4) {
-                $('#response-text').text('File not found');
+        // var http = new XMLHttpRequest();
+        // http.open('GET', 'db.txt');
+        // http.send();
+        // http.onreadystatechange = function () {
+        //     if (http.status === 200 && http.readyState === 4) {
+        //         $('#response-text').text(http.responseText);
+        //     }else if (http.status === 404 && http.readyState === 4) {
+        //         $('#response-text').text('File not found');
+        //     }
+        // };
+
+
+
+        $.ajax({
+            url: 'db.txt',
+            method: 'GET',
+            success : function (response) {
+                console.log(response)
+                $('#response-text').text(response);
+            },
+            error: function (error) {
+                console.error('Error:', error);
             }
-        };
+
+        });
 
     });
 
