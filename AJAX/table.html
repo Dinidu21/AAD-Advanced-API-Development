@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>Ajax</title>
+  <style>
+    table {
+      width: 60%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #333;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 
@@ -24,7 +36,6 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-
   $('#ajax-btn').click(function () {
     $.ajax({
       url: 'db.json',
