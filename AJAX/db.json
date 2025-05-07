@@ -1,6 +1,26 @@
-{
-  "firstName": "Dinidu",
-  "secondName": "Sachintha",
-  "address": "Colombo",
-  "mobile": "0771234567"
-}
+[
+  {
+    "firstName": "Dinidu",
+    "secondName": "Sachintha",
+    "address": "Colombo",
+    "mobile": "0771234567"
+  },
+  {
+    "firstName": "Nishan",
+    "secondName": "Perera",
+    "address": "Gampaha",
+    "mobile": "0777654321"
+  },
+  {
+    "firstName": "Kasun",
+    "secondName": "Fernando",
+    "address": "Kandy",
+    "mobile": "0779876543"
+  },
+  {
+    "firstName": "Tharindu",
+    "secondName": "Jayasinghe",
+    "address": "Matara",
+    "mobile": "0774567890"
+  }
+]

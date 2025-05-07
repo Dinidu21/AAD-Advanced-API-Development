@@ -10,11 +10,16 @@
 <button id="ajax-btn">Send an Ajax Request</button>
 <div id="response">
     <h2>Response</h2>
-    <p id="response-text">Response will be displayed here</p>
+    <p id="response-text">Student 01</p>
     <p id="firstName">John</p>
     <p id="secondName">Doe</p>
     <p id="address">New York</p>
     <p id="mobile">30</p>
+    <h3> Student 2 Response</h3>
+    <p id="firstName2">John</p>
+    <p id="secondName2">Doe</p>
+    <p id="address2">New York</p>
+    <p id="mobile2">30</p>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -44,21 +49,27 @@
         // };
 
 
+
         $.ajax({
             url: 'db.json',
             method: 'GET',
             success : function (response) {
                 console.log(response)
-                $('#firstName').text(response.firstName);
-                $('#secondName').text(response.secondName);
-                $('#address').text(response.address);
-                $('#mobile').text(response.mobile);
+                $('#firstName').text(response[0].firstName);
+                $('#secondName').text(response[0].secondName);
+                $('#address').text(response[0].address);
+                $('#mobile').text(response[0].mobile);
+                $('#firstName2').text(response[1].firstName);
+                $('#secondName2').text(response[1].secondName);
+                $('#address2').text(response[1].address);
+                $('#mobile2').text(response[1].mobile);
             },
             error: function (error) {
                 console.error('Error:', error);
             }
         });
     });
+
 </script>
 
 </body>
