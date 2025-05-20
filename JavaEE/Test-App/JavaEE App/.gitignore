@@ -37,3 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/encodings.xml
+/out/artifacts/JavaEEApp_Web_exploded/WEB-INF/classes/*
