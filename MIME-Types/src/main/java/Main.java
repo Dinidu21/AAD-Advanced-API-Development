@@ -17,17 +17,26 @@ public class Main extends HttpServlet {
         resp.getWriter().println("GET request received");
     }
 
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        // read the MIME type from the request body
+//        String collect = new BufferedReader(new InputStreamReader(
+//                req.getInputStream())).lines().
+//                collect(Collectors.joining("\n"));
+//
+//        // set the response content type to text/plain
+//        resp.setContentType("text/plain");
+//
+//        resp.getWriter().println("MIME Type Received\n");
+//        resp.getWriter().write(collect);
+//    }
+
+    // read x-www-form-urlencoded data from the request body
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // read the MIME type from the request body
-        String collect = new BufferedReader(new InputStreamReader(
-                req.getInputStream())).lines().
-                collect(Collectors.joining("\n"));
-
-        // set the response content type to text/plain
+        String name = req.getParameter("name");
+        String add = req.getParameter("address");
         resp.setContentType("text/plain");
-
-        resp.getWriter().println("MIME Type Received\n");
-        resp.getWriter().write(collect);
+        resp.getWriter().write("Name: " + name + "\nAddress: " + add);
     }
 }
