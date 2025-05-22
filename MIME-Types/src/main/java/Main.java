@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -43,7 +45,7 @@ public class Main extends HttpServlet {
         resp.getWriter().write("Name: " + name + "\nAddress: " + add);
     }*/
 
-    // read multipart/form-data from the request body
+/*    // read multipart/form-data from the request body
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String text = req.getParameter("text");
@@ -54,5 +56,20 @@ public class Main extends HttpServlet {
         resp.setContentType("text/plain");
         resp.getWriter().write("Text :" + text+"\n");
         resp.getWriter().write("File Name: " + fileName);
+    }*/
+
+    //read JSON data from the request body
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = mapper.readTree(req.getReader());
+
+        String name = node.get("name").asText();
+        String address = node.get("address").asText();
+
+        // set the response content type to text/plain
+        resp.setContentType("text/plain");
+        resp.getWriter().write("Name: " + name + "\nAddress: " + address);
     }
 }
