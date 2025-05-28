@@ -27,29 +27,53 @@ public class EventServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try{
+        String pathInfo = req.getPathInfo();
+        resp.setContentType("application/json");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DBConnection.getInstance().getConnection();
-            ResultSet resultSet = connection.prepareStatement("SELECT * FROM event").executeQuery();
-            List<Map<String,String>> elist = new ArrayList<>();
 
-            while (resultSet.next()) {
-                Map<String, String> event = new HashMap<>();
-                event.put("id", resultSet.getString("id"));
-                event.put("name", resultSet.getString("name"));
-                event.put("description", resultSet.getString("description"));
-                event.put("date", resultSet.getString("date"));
-                event.put("time", resultSet.getString("time"));
-                elist.add(event);
+            if (pathInfo == null || pathInfo.equals("/")) {
+                // Return all events
+                ResultSet resultSet = connection.prepareStatement("SELECT * FROM event").executeQuery();
+                List<Map<String,String>> elist = new ArrayList<>();
+
+                while (resultSet.next()) {
+                    Map<String, String> event = new HashMap<>();
+                    event.put("id", resultSet.getString("id"));
+                    event.put("name", resultSet.getString("name"));
+                    event.put("description", resultSet.getString("description"));
+                    event.put("date", resultSet.getString("date"));
+                    event.put("time", resultSet.getString("time"));
+                    elist.add(event);
+                }
+
+                objectMapper.writeValue(resp.getWriter(), elist);
+
+            } else {
+                // Return single event by ID
+                String id = pathInfo.substring(1);
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM event WHERE id = ?");
+                ps.setString(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    Map<String, String> event = new HashMap<>();
+                    event.put("id", rs.getString("id"));
+                    event.put("name", rs.getString("name"));
+                    event.put("description", rs.getString("description"));
+                    event.put("date", rs.getString("date"));
+                    event.put("time", rs.getString("time"));
+                    objectMapper.writeValue(resp.getWriter(), event);
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    resp.getWriter().write("{\"error\":\"Event not found\"}");
+                }
             }
 
-            resp.setContentType("application/json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(resp.getWriter(), elist);
-
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("JDBC Driver not found", e);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -91,12 +115,13 @@ public class EventServlet extends HttpServlet {
             Connection connection = DBConnection.getInstance().getConnection();
 
             PreparedStatement stmt = connection.prepareStatement(
-                    "UPDATE event SET name = ?, description = ?, date = ?, place = ? WHERE eid = ?"
+                    "UPDATE event SET name = ?, description = ?, date = ?, time = ? WHERE id = ?"
             );
             stmt.setString(1, event.get("name"));
             stmt.setString(2, event.get("description"));
             stmt.setString(3, event.get("date"));
             stmt.setString(4, event.get("time"));
+            stmt.setString(5, event.get("id"));
 
             int rows = stmt.executeUpdate();
             resp.setContentType("application/json");

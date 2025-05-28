@@ -52,7 +52,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Save Event</button>
+                <button type="submit" class="btn btn-success save-btn">Save Event</button>
+                <button id="updateEvent" type="button" class="btn btn-success update-btn d-none">Update Event</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
         </form>
@@ -65,9 +66,12 @@
 <script>
     $(document).ready(function () {
         const baseUrl = 'http://localhost:8080/app1';
+        const apiUrl = baseUrl + '/event';
+        const modalElement = document.getElementById('eventModal');
+        const eventModal = new bootstrap.Modal(modalElement);
 
         function loadEvents() {
-            $.get(baseUrl + '/event', function (data) {
+            $.get(apiUrl, function (data) {
                 const grid = $('#eventCards').empty();
                 if (!data || data.length === 0) {
                     grid.append('<p class="text-center">No events found</p>');
@@ -105,15 +109,15 @@
 
         loadEvents();
 
-        // Show create modal
         $('#createEventBtn').on('click', function () {
             $('#eventModalLabel').text('Create New Event');
             $('#eventForm')[0].reset();
             $('#eventForm input[name="id"]').val('');
-            $('#eventModal').modal('show');
+            $('.save-btn').removeClass('d-none');
+            $('.update-btn').addClass('d-none');
+            eventModal.show();
         });
 
-        // Create new event
         $('#eventForm').on('submit', function (e) {
             e.preventDefault();
             const formData = {
@@ -122,40 +126,37 @@
                 date: $('#eventForm input[name="date"]').val(),
                 time: $('#eventForm input[name="time"]').val()
             };
-            console.log("Submitting form data:", formData); // Log form data for debugging
-
             $.ajax({
-                url: baseUrl + '/event',
+                url: apiUrl,
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function () {
-                    $('#eventModal').modal('hide');
+                    eventModal.hide();
                     loadEvents();
                 },
                 error: function (err) {
                     alert("Error saving event: " + err.responseText);
-                    console.error(err); // Log error details for debugging
                 }
             });
         });
 
-        // Edit event
-        $('#eventCards').on('click', '.edit-btn', function () {
-
-            const formData = {
-                name: $('#eventForm input[name="name"]').val(),
-                description: $('#eventForm textarea[name="description"]').val(),
-                date: $('#eventForm input[name="date"]').val(),
-                time: $('#eventForm input[name="time"]').val()
+        $('.update-btn').click(function () {
+            const event = {
+                id: $('input[name="id"]').val(),
+                name: $('input[name="name"]').val(),
+                description: $('textarea[name="description"]').val(),
+                date: $('input[name="date"]').val(),
+                time: $('input[name="time"]').val()
             };
             $.ajax({
-                url: baseUrl + '/event',
+                url: apiUrl + '/' + event.id,
                 method: 'PUT',
                 contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
+                data: JSON.stringify(event),
+                success: function () {
                     alert('Event updated');
+                    eventModal.hide();
                     loadEvents();
                 },
                 error: function () {
@@ -164,18 +165,38 @@
             });
         });
 
-        // Delete event
+        $(document).on('click', '.edit-btn', function () {
+            const eventId = $(this).data('id');
+            $.ajax({
+                url: apiUrl + '/' + eventId,
+                method: 'GET',
+                success: function (event) {
+                    $('#eventModal input[name="id"]').val(event.id);
+                    $('#eventModal input[name="name"]').val(event.name);
+                    $('#eventModal textarea[name="description"]').val(event.description);
+                    $('#eventModal input[name="date"]').val(event.date);
+                    $('#eventModal input[name="time"]').val(event.time);
+
+                    $('#eventModalLabel').text('Edit Event');
+                    $('.save-btn').addClass('d-none');
+                    $('.update-btn').removeClass('d-none');
+
+                    eventModal.show();
+                },
+                error: function () {
+                    alert('Failed to load event data.');
+                }
+            });
+        });
+
         $('#eventCards').on('click', '.delete-btn', function () {
             const eid = $(this).data('id');
-            console.log("Deleting event with ID:", eid);
-
             if (!eid) {
                 alert("Event ID not found.");
                 return;
             }
-
             $.ajax({
-                url: baseUrl + '/event/' + eid,
+                url: apiUrl + '/' + eid,
                 method: 'DELETE',
                 success: function () {
                     alert('Event deleted');
@@ -186,7 +207,6 @@
                 }
             });
         });
-
     });
 </script>
 </body>
