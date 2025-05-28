@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import db.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,11 +22,8 @@ public class EventServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/eventdb", "root", "root123");
-
+            Connection connection = DBConnection.getInstance().getConnection();
             ResultSet resultSet = connection.prepareStatement("SELECT * FROM event").executeQuery();
-
             List<Map<String,String>> elist = new ArrayList<>();
 
             while (resultSet.next()) {
@@ -34,7 +32,7 @@ public class EventServlet extends HttpServlet {
                 event.put("name", resultSet.getString("name"));
                 event.put("description", resultSet.getString("description"));
                 event.put("date", resultSet.getString("date"));
-                event.put("place", resultSet.getString("time"));
+                event.put("time", resultSet.getString("time"));
                 elist.add(event);
             }
 
