@@ -19,16 +19,20 @@ import java.util.Map;
 
 @WebServlet("/dbcp")
 public class DBCPServlet extends HttpServlet {
+    BasicDataSource ds = new BasicDataSource();
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        BasicDataSource ds = new BasicDataSource();
+    public void init() throws ServletException {
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost:3306/eventdb");
         ds.setUsername("root");
         ds.setPassword("root123");
         ds.setInitialSize(50);
         ds.setMaxTotal(100);
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
         resp.setContentType("application/json");
         ObjectMapper objectMapper = new ObjectMapper();
@@ -82,14 +86,6 @@ public class DBCPServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> event = mapper.readValue(req.getInputStream(), Map.class);
-        BasicDataSource ds = new BasicDataSource();
-        ds.setDriverClassName("com.mysql.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/eventdb");
-        ds.setUsername("root");
-        ds.setPassword("root123");
-        ds.setInitialSize(50);
-        ds.setMaxTotal(100);
-
         try {
             Connection connection = ds.getConnection();
             PreparedStatement stmt = connection.prepareStatement(
