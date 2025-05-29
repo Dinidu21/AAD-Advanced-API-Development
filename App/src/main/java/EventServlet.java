@@ -1,7 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import db.DBConnection;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +16,13 @@ import java.util.Map;
 @WebServlet("/event/*")
 public class EventServlet extends HttpServlet {
 
-    @Override
+/*    @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Origin", "http://localhost:63342");
         resp.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
         resp.setStatus(HttpServletResponse.SC_OK);
-    }
+    }*/
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
