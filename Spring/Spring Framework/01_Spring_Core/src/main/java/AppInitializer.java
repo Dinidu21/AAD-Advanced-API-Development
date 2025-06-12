@@ -17,5 +17,9 @@ public class AppInitializer {
 
         System.out.println("Bean ID :"+ bean1);
         System.out.println("Bean ID :"+ bean2); // singleton behaviour
+
+        context.close();
+        SpringBean bean3 = context.getBean(SpringBean.class);
+        System.out.println("Bean ID after context close: " + bean3); // This will throw an exception since the context is closed
     }
 }
