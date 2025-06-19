@@ -1,4 +1,4 @@
-package bean;
+package src.main.java.bean;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

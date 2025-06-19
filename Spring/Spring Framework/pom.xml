@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>01_Spring_Core</module>
-        <module>03</module>
+        <module>03_Dependency_Injection</module>
     </modules>
 
     <properties>
