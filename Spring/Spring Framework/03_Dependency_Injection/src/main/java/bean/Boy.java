@@ -1,20 +1,22 @@
 package bean;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("singleton") // Default scope is singleton, but explicitly defining it
+@Scope("singleton")
 public class Boy {
+    @Qualifier("girl1")
     @Autowired
-    Agreement agreement;
+    Agreement girl;
 
     public Boy (){
         System.out.println("Boy Instance Created");
     }
 
     public void chatWithBoyFriend() {
-        agreement.chat();
+        girl.chat();
     }
 }
