@@ -1,5 +1,5 @@
-import bean.Boy;
 import config.AppConfig;
+import di.Bean2;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class App {
@@ -8,8 +8,8 @@ public class App {
             context.register(AppConfig.class);
             context.refresh();
 
-            Boy boy = context.getBean(Boy.class);
-            boy.chatWithBoyFriend();
+            Bean2 bean =context.getBean(Bean2.class);
+            bean.test();
             context.registerShutdownHook();
     }
 }
