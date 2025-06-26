@@ -1,15 +1,15 @@
-package com.dinidu.config;
+package com.dinidu.bean;
 
-import com.dinidu.bean.SpringBean2;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@ComponentScan(basePackages = "com.dinidu.bean")
-public class AppConfig {
+@Component
+public class SpringBean3 {
+    public SpringBean3() {
+        System.out.println("SpringBean3 constructor called");
+    }
 
-    // Interbean dependency satisfaction in Spring Full Mode
+    // Interbean dependency satisfaction is not in Spring Light Mode
     @Bean
     public com.dinidu.bean.SpringBean1 springBean1() {
         SpringBean2 springBean2 = springBean2();
