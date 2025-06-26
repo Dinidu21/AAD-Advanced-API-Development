@@ -1,4 +1,4 @@
-package config;
+package src.main.java.config;
 
 
 import bean.MyConnection;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@ComponentScan(basePackages = "bean")
+@ComponentScan(basePackages = "")
 public class AppConfig {
     @Scope ("prototype")
     @Bean
