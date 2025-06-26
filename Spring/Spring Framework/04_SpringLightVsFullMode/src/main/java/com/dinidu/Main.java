@@ -9,7 +9,6 @@ public class Main {
         context.register(AppConfig.class);
         context.refresh();
 
-
         context.registerShutdownHook();
     }
 }

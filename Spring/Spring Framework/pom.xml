@@ -12,6 +12,7 @@
         <module>01_Spring_Core</module>
         <module>03_Dependency_Injection</module>
         <module>04_SpringLightVsFullMode</module>
+        <module>05_Configuration</module>
     </modules>
 
     <properties>
