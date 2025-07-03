@@ -19,4 +19,10 @@ public class PathVariableController {
                                                     @PathVariable("age") int age) {
         return "Name: " + name + ", Age: " + age;
     }
+
+    @GetMapping("/{id}/details/{type}")
+    public String getPathVariableWithDetails(@PathVariable("id") String id,
+                                             @PathVariable("type") String type) {
+        return "ID: " + id + ", Type: " + type;
+    }
 }
