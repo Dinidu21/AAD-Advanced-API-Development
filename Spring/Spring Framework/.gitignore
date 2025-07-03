@@ -36,3 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/out/artifacts/REST_Controllers_Web_exploded/WEB-INF/classes/com/dinidu/controller/HelloController.class
+/out/**
