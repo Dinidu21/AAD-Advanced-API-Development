@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("char")
 public class CharController {
 
-    @GetMapping("item/i???")
-    public String getChar() {
-        return "Hello World";
+    //IP12
+    //I123
+    @GetMapping(path = "item/I???")
+    public String sayHello(){
+        return "Hello World Item";
     }
-
-    @GetMapping("????/item")
-    public String getChar2() {
-        return "Hello World 2";
+    //char/1234/search
+    //char/absd/search
+    @GetMapping("????/search")
+    public String sayHelloGet(){
+        return "Hello World search";
     }
 }
