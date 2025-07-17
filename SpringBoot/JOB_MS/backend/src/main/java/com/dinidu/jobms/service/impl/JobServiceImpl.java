@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +32,7 @@ public class JobServiceImpl implements JobService {
         jobRepository.save(modelMapper.map(jobDTO, Job.class));
     }
 
-    @Override
-    public List<JobDTO> getAllJobs() {
-        List<Job> allJobs=jobRepository.findAll();
-        return modelMapper.map(allJobs,new TypeToken<List<JobDTO>>(){}.getType());
-    }
+
 
     @Override
     public void changeJobStatus(String id) {
@@ -45,5 +43,11 @@ public class JobServiceImpl implements JobService {
     public List<JobDTO> getAllJobsByKeyword(String keyword) {
         List<Job> list=jobRepository.findJobByJobTitleContainingIgnoreCase(keyword);
         return modelMapper.map(list,new TypeToken<List<JobDTO>>(){}.getType());
+    }
+
+    @Override
+    public Page<JobDTO> getAllJobs(PageRequest of) {
+        Page<Job> jobPage = jobRepository.findAll(of);
+        return jobPage.map(job -> modelMapper.map(job, JobDTO.class));
     }
 }
