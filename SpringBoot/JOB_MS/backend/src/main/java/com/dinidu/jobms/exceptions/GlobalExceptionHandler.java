@@ -31,4 +31,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(DuplicateJobException.class)
+    public ResponseEntity<ApiResponse<String>> handleDuplicateJob(DuplicateJobException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(
+                        409,
+                        ex.getMessage(),
+                        null
+                )
+        );
+    }
 }

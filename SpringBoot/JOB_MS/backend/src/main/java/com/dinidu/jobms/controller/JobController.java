@@ -4,6 +4,7 @@ import com.dinidu.jobms.dto.JobDTO;
 import com.dinidu.jobms.exceptions.ResourceNotFoundException;
 import com.dinidu.jobms.service.JobService;
 import com.dinidu.jobms.utility.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +21,8 @@ public class JobController {
     private final JobService jobService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> createJob(@RequestBody JobDTO jobDTO) {
-        jobService.saveJob(jobDTO);
+    public ResponseEntity<ApiResponse<String>> createJob(@Valid @RequestBody JobDTO jobDTO){
+    jobService.saveJob(jobDTO);
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         201,
@@ -48,9 +49,11 @@ public class JobController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         Page<JobDTO> jobPage = jobService.getAllJobs(PageRequest.of(page, size));
+
         if (jobPage.isEmpty()) {
             throw new ResourceNotFoundException("No jobs found");
         }
+
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         200,

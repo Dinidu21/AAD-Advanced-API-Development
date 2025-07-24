@@ -17,10 +17,17 @@ $('#saveJobBtn').click(() => {
     })
         .then(res => res.json())
         .then(data => {
-            alert(data.message);
-            loadJobs();
+            if (data.status === 409) {
+                alert("Job already exists!");
+            } else {
+                alert(data.message);
+                loadJobs();
+            }
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+            console.error(err);
+            alert("Error occurred while saving the job.");
+        });
 });
 
 function loadJobs(page = 0, size = 5) {

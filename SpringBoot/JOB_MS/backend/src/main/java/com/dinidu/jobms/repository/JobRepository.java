@@ -17,6 +17,7 @@ public interface JobRepository extends JpaRepository<Job, Integer> {
     void updateJobStatus(String id);
 
     List<Job> findJobByJobTitleContainingIgnoreCase(String keyword);
+    boolean existsByJobTitleAndCompanyAndLocation(String jobTitle, String company, String location);
 
     //JPA METHODS
     // Prefix + FieldName + Operator + Conjunctions

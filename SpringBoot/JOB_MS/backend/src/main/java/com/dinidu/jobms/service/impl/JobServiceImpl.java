@@ -2,6 +2,7 @@ package com.dinidu.jobms.service.impl;
 
 import com.dinidu.jobms.dto.JobDTO;
 import com.dinidu.jobms.entity.Job;
+import com.dinidu.jobms.exceptions.DuplicateJobException;
 import com.dinidu.jobms.exceptions.ResourceNotFoundException;
 import com.dinidu.jobms.repository.JobRepository;
 import com.dinidu.jobms.service.JobService;
@@ -24,8 +25,16 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void saveJob(JobDTO jobDTO) {
+        boolean exists = jobRepository.existsByJobTitleAndCompanyAndLocation(
+                jobDTO.getJobTitle(), jobDTO.getCompany(), jobDTO.getLocation()
+        );
+        if (exists) {
+            throw new DuplicateJobException("Job already exists with same title, company, and location");
+        }
+        // convert DTO to entity and save
         jobRepository.save(modelMapper.map(jobDTO, Job.class));
     }
+
 
     @Override
     public void updateJob(JobDTO jobDTO) {
