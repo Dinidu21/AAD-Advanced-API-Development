@@ -83,4 +83,16 @@ public class JobController {
                 )
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteJob(@PathVariable Integer id) {
+        jobService.deleteJob(id);
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Job deleted successfully",
+                        null
+                )
+        );
+    }
 }

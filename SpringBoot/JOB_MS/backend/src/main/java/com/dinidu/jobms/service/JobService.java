@@ -13,4 +13,5 @@ public interface JobService {
     void changeJobStatus(String id);
     List<JobDTO> getAllJobsByKeyword(String keyword);
     Page<JobDTO> getAllJobs(PageRequest of);
+    void deleteJob(Integer id);
 }

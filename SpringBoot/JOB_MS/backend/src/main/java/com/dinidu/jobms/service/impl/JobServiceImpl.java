@@ -2,6 +2,7 @@ package com.dinidu.jobms.service.impl;
 
 import com.dinidu.jobms.dto.JobDTO;
 import com.dinidu.jobms.entity.Job;
+import com.dinidu.jobms.exceptions.ResourceNotFoundException;
 import com.dinidu.jobms.repository.JobRepository;
 import com.dinidu.jobms.service.JobService;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,11 @@ public class JobServiceImpl implements JobService {
     public Page<JobDTO> getAllJobs(PageRequest of) {
         Page<Job> jobPage = jobRepository.findAll(of);
         return jobPage.map(job -> modelMapper.map(job, JobDTO.class));
+    }
+    public void deleteJob(Integer id) {
+        if (!jobRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Job not found");
+        }
+        jobRepository.deleteById(id);
     }
 }
