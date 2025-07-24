@@ -31,7 +31,6 @@ public class JobServiceImpl implements JobService {
         if (exists) {
             throw new DuplicateJobException("Job already exists with same title, company, and location");
         }
-        // convert DTO to entity and save
         jobRepository.save(modelMapper.map(jobDTO, Job.class));
     }
 

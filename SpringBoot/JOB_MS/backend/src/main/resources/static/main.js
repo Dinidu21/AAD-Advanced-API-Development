@@ -78,7 +78,6 @@ function editJob(jobData) {
     editModal.show();
 }
 
-
 $('#updateJobBtn').click(() => {
     const job = {
         id: $('#editJobId').val(),
