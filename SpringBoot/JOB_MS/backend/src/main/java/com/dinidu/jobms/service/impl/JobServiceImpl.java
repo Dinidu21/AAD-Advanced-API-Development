@@ -21,7 +21,6 @@ public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final ModelMapper modelMapper;
 
-
     @Override
     public void saveJob(JobDTO jobDTO) {
         jobRepository.save(modelMapper.map(jobDTO, Job.class));
@@ -31,8 +30,6 @@ public class JobServiceImpl implements JobService {
     public void updateJob(JobDTO jobDTO) {
         jobRepository.save(modelMapper.map(jobDTO, Job.class));
     }
-
-
 
     @Override
     public void changeJobStatus(String id) {

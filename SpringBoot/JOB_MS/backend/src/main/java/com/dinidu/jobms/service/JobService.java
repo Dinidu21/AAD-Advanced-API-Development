@@ -8,13 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 public interface JobService {
-    public void saveJob(JobDTO jobDTO);
-    public void updateJob(JobDTO jobDTO);
-    
-
+    void saveJob(JobDTO jobDTO);
+    void updateJob(JobDTO jobDTO);
     void changeJobStatus(String id);
-
     List<JobDTO> getAllJobsByKeyword(String keyword);
-
     Page<JobDTO> getAllJobs(PageRequest of);
 }

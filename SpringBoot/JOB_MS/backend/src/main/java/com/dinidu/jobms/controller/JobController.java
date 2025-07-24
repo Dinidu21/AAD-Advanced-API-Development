@@ -2,45 +2,59 @@ package com.dinidu.jobms.controller;
 
 import com.dinidu.jobms.dto.JobDTO;
 import com.dinidu.jobms.service.JobService;
+import com.dinidu.jobms.utility.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("api/v1/job")
 @RestController
+@RequestMapping("api/v1/jobs")
 @RequiredArgsConstructor
 public class JobController {
 
-    //constructor injection
     private final JobService jobService;
 
-    @PostMapping("create")
-    public void createJob(@RequestBody JobDTO jobDTO){
+    @PostMapping
+    public ResponseEntity<ApiResponse<String>> createJob(@RequestBody JobDTO jobDTO) {
         jobService.saveJob(jobDTO);
+        return ResponseEntity.ok(new ApiResponse<>(201, "Job created successfully", null));
     }
 
-    @PutMapping("edit")
-    public void updateJob(@RequestBody JobDTO jobDTO){
+    @PutMapping
+    public ResponseEntity<ApiResponse<String>> updateJob(@RequestBody JobDTO jobDTO) {
         jobService.updateJob(jobDTO);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Job updated successfully", null));
     }
 
-    @GetMapping("alljobs")
-    public Page<JobDTO> getAllJobs(
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<JobDTO>>> getAllJobs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        return jobService.getAllJobs(PageRequest.of(page, size));
+        Page<JobDTO> jobPage = jobService.getAllJobs(PageRequest.of(page, size));
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "All jobs fetched successfully",
+                        jobPage
+                )
+        );
     }
 
-    @PatchMapping("status/{id}")
-    public void changeStatus(@PathVariable("id") String id){
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<String>> changeStatus(@PathVariable String id) {
         jobService.changeJobStatus(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Job status updated successfully", null));
     }
 
-    @GetMapping("search/{keyword}")
-    public List<JobDTO> searchJob(@PathVariable("keyword") String keyword){
-        return jobService.getAllJobsByKeyword(keyword);
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<ApiResponse<List<JobDTO>>> searchJob(@PathVariable String keyword) {
+        List<JobDTO> results = jobService.getAllJobsByKeyword(keyword);
+        return ResponseEntity.ok(
+                new ApiResponse<>(200, "Jobs fetched successfully", results)
+        );
     }
 }
