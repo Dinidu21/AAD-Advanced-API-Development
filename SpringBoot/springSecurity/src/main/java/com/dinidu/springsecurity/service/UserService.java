@@ -3,6 +3,7 @@ package com.dinidu.springsecurity.service;
 import com.dinidu.springsecurity.dto.UserLoginDto;
 import com.dinidu.springsecurity.dto.UserRegistrationDto;
 import com.dinidu.springsecurity.dto.UserResponseDto;
+import com.dinidu.springsecurity.model.Role;
 import com.dinidu.springsecurity.model.User;
 import com.dinidu.springsecurity.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,16 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
+        if (userRepository.findByEmail(registrationDto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
 
         User user = new User();
         user.setName(registrationDto.getName());
         user.setUsername(registrationDto.getUsername());
+        user.setEmail(registrationDto.getEmail());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+        user.setRole(registrationDto.getRole() != null ? registrationDto.getRole() : Role.USER); // Default to USER
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
 
@@ -85,7 +91,11 @@ public class UserService implements UserDetailsService {
 
         user.setName(updateDto.getName());
         user.setUsername(updateDto.getUsername());
+        user.setEmail(updateDto.getEmail());
         user.setPassword(passwordEncoder.encode(updateDto.getPassword()));
+        if (updateDto.getRole() != null) {
+            user.setRole(updateDto.getRole());
+        }
         user.setUpdatedAt(LocalDateTime.now());
 
         user = userRepository.save(user);
@@ -106,7 +116,7 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles("USER")
+                .roles(user.getRole().name())
                 .build();
     }
 
@@ -115,6 +125,8 @@ public class UserService implements UserDetailsService {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getUpdatedAt());
         return dto;
