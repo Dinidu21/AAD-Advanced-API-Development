@@ -1,6 +1,8 @@
 package com.dinidu.jobms.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ public class JobDTO {
     private Integer id;
 
     @NotBlank(message = "Job title is required")
+    @Pattern(regexp = "^[a-zA-Z0-9 ]+$", message = "Job title can only contain alphanumeric characters and spaces")
     private String jobTitle;
 
     @NotBlank(message = "Company is required")
@@ -25,6 +28,7 @@ public class JobDTO {
     @NotBlank(message = "Type is required")
     private String type;
 
+    @Size(min = 10, max = 100, message = "Job Description should be at least 10 characters long")
     private String jobDescription;
     private String status;
 }
