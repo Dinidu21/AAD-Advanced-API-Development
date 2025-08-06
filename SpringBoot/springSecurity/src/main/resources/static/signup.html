@@ -249,110 +249,33 @@
 <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
 <script>
-    $(document).ready(function() {
-        const API_BASE_URL = 'http://localhost:8080/api/users';
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const user = {
+            username: formData.get("username"),
+            password: formData.get("password"),
+            role: formData.get("role") ?? "USER"
+        };
 
-        function showMessage(message, type = 'success') {
-            const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-            const icon = type === 'success' ?
-                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
-                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-
-            const messageElement = $(`
-                    <div class="message-alert ${bgColor} bg-opacity-90 text-white px-4 py-3 rounded-lg shadow-lg flex items-center animate-slide-down border border-white border-opacity-20">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            ${icon}
-                        </svg>
-                        <span>${message}</span>
-                        <button class="ml-4 hover:text-opacity-80">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                `);
-
-            $('#messageContainer').append(messageElement);
-
-            setTimeout(() => {
-                messageElement.fadeOut(() => messageElement.remove());
-            }, 5000);
-
-            messageElement.find('button').click(() => {
-                messageElement.fadeOut(() => messageElement.remove());
-            });
-        }
-
-        $('#signupForm').submit(function(e) {
-            e.preventDefault();
-            $('#nameError').addClass('hidden');
-            $('#usernameError').addClass('hidden');
-            $('#emailError').addClass('hidden');
-            $('#passwordError').addClass('hidden');
-            $('#signupBtn').prop('disabled', true);
-            $('#signupLoading').removeClass('hidden');
-
-            const registerData = {
-                name: $('#name').val().trim(),
-                username: $('#username').val().trim(),
-                email: $('#email').val().trim(),
-                password: $('#password').val()
-            };
-
-            $.ajax({
-                url: `${API_BASE_URL}/register`,
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(registerData),
-                success: function(response) {
-                    if (response.success) {
-                        showMessage('Registration successful! Redirecting to login...', 'success');
-                        setTimeout(() => {
-                            window.location.href = '/signin';
-                        }, 1500);
-                    } else {
-                        if (response.errors) {
-                            response.errors.forEach(error => {
-                                $(`#${error.field}Error`).text(error.message).removeClass('hidden');
-                            });
-                        } else {
-                            showMessage(response.message || 'Registration failed', 'error');
-                        }
-                        $('#signupBtn').prop('disabled', false);
-                        $('#signupLoading').addClass('hidden');
-                    }
+        try {
+            const response = await fetch("/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                error: function(xhr) {
-                    showMessage(xhr.responseJSON?.message || 'Network error during registration', 'error');
-                    $('#signupBtn').prop('disabled', false);
-                    $('#signupLoading').addClass('hidden');
-                }
+                body: JSON.stringify(user)
             });
-        });
 
-        $('#password').on('input', function() {
-            const password = $(this).val();
-            let strength = 'Weak';
-            let strengthClass = 'password-strength-weak';
-
-            if (password.length >= 12 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
-                strength = 'Strong';
-                strengthClass = 'password-strength-strong';
-            } else if (password.length >= 8) {
-                strength = 'Moderate';
-                strengthClass = 'password-strength-moderate';
+            if (response.ok) {
+                window.location.href = "/auth/signup-redirect";
+            } else {
+                const error = await response.json();
+                alert(error.message || "Signup failed");
             }
-
-            $('#passwordStrengthBar')
-                .removeClass('password-strength-weak password-strength-moderate password-strength-strong')
-                .addClass(strengthClass);
-
-            $('#passwordStrengthText').text(`Password strength: ${strength}`);
-
-            // Animate width based on strength
-            const width = strength === 'Strong' ? '100%' : strength === 'Moderate' ? '66%' : '33%';
-            $('#passwordStrengthBar').css('width', width);
-        });
+        } catch (error) {
+            alert("Error during signup");
+        }
     });
 </script>
 </body>
